@@ -8,4 +8,4 @@ script, and set it to run as a cron task. Don't forget that the script contains
 important information so don't forget to give it strict permissions
 (700 is good).
 
-For more information, check http://code.google.com/p/mysql-maint/
+For more information, check http://github.com/mmerian/MySQL-Maint

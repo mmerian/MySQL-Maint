@@ -1,0 +1,11 @@
+Welcome to MySQL Maint, a bash script that perform backups and maintenance over
+your MySQL Servers
+
+Installation
+
+Edit the variables DB_HOST, DB_USER, DB_PASS, DB_PORT at the beginning of the
+script, and set it to run as a cron task. Don't forget that the script contains
+important information so don't forget to give it strict permissions
+(700 is good).
+
+For more information, check http://code.google.com/p/mysql-maint/

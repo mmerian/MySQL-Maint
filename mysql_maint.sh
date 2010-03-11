@@ -568,7 +568,7 @@ show_maintenance_databases()
 		local databases=`show_all_databases`
 		local db=''
 		for db in ${IGNORE_MAINTENANCE_DATABASES}; do
-			databases=`echo ${databases}|${SED} "s/\b${db}\b//g"`
+			databases=`echo ${databases}|${SED} "s/${db}//g"`
 		done;
 		echo $databases
 	fi
@@ -585,7 +585,7 @@ show_backup_databases()
 		local databases=`show_all_databases`
 		local db=''
 		for db in ${IGNORE_BACKUP_DATABASES}; do
-			databases=`echo ${databases}|${SED} "s/\b${db}\b//g"`
+			databases=`echo ${databases}|${SED} "s/${db}//g"`
 		done;
 		echo $databases
 	fi

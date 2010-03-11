@@ -3,7 +3,7 @@
 ############################################################################################
 # MySQL Maint : A bash script that performs backups and maintenance on your MySQL servers. #
 #                                                                                          #
-# Copyright (C) 2009  Maxime Mérian <maxime.merian@gmail.com>                              #
+# Copyright (C) 2009-2010  Maxime Mérian <maxime.merian@gmail.com>                         #
 #                                                                                          #
 # This program is free software: you can redistribute it and/or modify                     #
 # it under the terms of the GNU General Public License as published by                     #
@@ -177,12 +177,12 @@ DO_BACKUP=0
 ##############################
 # Check if running GNU/Linux #
 ##############################
-PLATFORM_IS_LINUX=0
+PLATFORM_IS_LINUX=yes
 systemName="`uname -a`"
 linuxCheck="`expr "$systemName" : ".*\(Linux\).*"`"
 if [ -z "$linuxCheck" ]; then
 	# uname -a didn't return a string that contains 'Linux'
-	PLATFORM_IS_LINUX=1
+	PLATFORM_IS_LINUX=no
 fi
 
 #############################
@@ -190,7 +190,7 @@ fi
 #############################
 
 # Script version
-VERSION="1.0.1"
+VERSION="1.1"
 
 # File that is being written by the script. Will be deleted
 # on receiving SIGINT or SIGTERM, since it won't be valid
@@ -787,7 +787,7 @@ delete_old_backups()
 ##############################
 sizeof_file()
 {
-	if [ ! $PLATFORM_IS_LINUX ]; then
+	if [ "$PLATFORM_IS_LINUX" != "yes" ]; then
 		eval "`${STAT_BIN} -s "$1"`"
 		echo $st_size
 	else

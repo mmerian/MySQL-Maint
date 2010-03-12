@@ -9,7 +9,7 @@ MySQL Maint 1.0.1 (2009-05-16)
 - Move trapping signals to the top of the script. Added trap for EXIT, so the pid and temp files are always deleted
 - Check the return code of mysqldump to ensure the backup file is correct
 
-MySQL Maint 1.0.2 ()
+MySQL Maint 1.1 (2010-03-)
 - Remove bashisms
 - Display a message if no backup or maintenance was required
 - Added ANALYZE TABLE to maintenance function
@@ -20,3 +20,4 @@ MySQL Maint 1.0.2 ()
 - Use pbzip2 instead of bzip2 if possible
 - Typo error
 - Don't check a table again after repairing
+- Fixed errors with sed and platform check under FreeBSD

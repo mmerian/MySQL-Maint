@@ -608,6 +608,16 @@ show_tables()
 	fi
 }
 
+########################################################
+# Quotes an identifier (a table name or database name) #
+#                                                      #
+# $1 : the identifier                                  #
+########################################################
+quote_identifier()
+{
+	echo '`'$1'`'
+}
+
 ####################################
 # Starts maintenance on a database #
 # $1 : database name               #
@@ -617,24 +627,23 @@ db_maintenance()
 	local database=$1
 	log_m "Maintenance started on database ${database}"
 	for i in `show_tables $database`; do
-			local msg_text=`${MYSQL} -e "CHECK TABLE $i" -E $1|${GREP} Msg_text |${CUT} -d' ' -f2`
+			local quotedTableName=`quote_identifier $i`
+			local msg_text=`${MYSQL} -e "CHECK TABLE $quotedTableName" -E $1|${GREP} Msg_text |${CUT} -d' ' -f2`
 			echo "	$i : ${msg_type} ...${msg_text}"
 			local log_message="Checking table ${i}..."
 			if [ "$msg_text" != "OK" ]; then
 				log_message="${log_message} ${msg_text}"
 				echo "		Repairing table $i"
-				${MYSQL} -e "REPAIR TABLE $i EXTENDED" $1 &> ${TRASH}
-				#msg_text=`${MYSQL} -e "CHECK TABLE $i" -E $1|${GREP} Msg_text |${CUT} -d' ' -f2`
-				#echo "		$i : ${msg_type} ...${msg_text}"
+				${MYSQL} -e "REPAIR TABLE $quotedTableName EXTENDED" $1 &> ${TRASH}
 			else
 				log_message="${log_message} OK"
 			fi;
 			log_m "${log_message}"
 			log_m "Optimizing table $i"
-			${MYSQL} -e "OPTIMIZE TABLE $i" $1 > ${TRASH}
+			${MYSQL} -e "OPTIMIZE TABLE $quotedTableName" $1 > ${TRASH}
 
 			log_m "Analyzing table $i"
-			${MYSQL} -e "ANALYZE TABLE $i" $1 > ${TRASH}
+			${MYSQL} -e "ANALYZE TABLE $quotedTableName" $1 > ${TRASH}
 	done
 	log_m "Maintenance complete on database ${database}"
 }

@@ -169,6 +169,9 @@ PID_FILE="/tmp/mysql_maint.pid"
 # Dave Null
 TRASH="/dev/null"
 
+# Configuration file
+CONFIG_FILE=''
+
 # What should the script do ?
 # don't modify here, use -b (backup) or -m (maintenance) command-line options
 DO_MAINTENANCE=0
@@ -243,6 +246,7 @@ E_OK=0              # no error
 E_PID_EXISTS=1      # pid file exists, script already running
 E_CONNECT_FAILED=2  # unable to connect to MySQL Server
 E_WRITE_PERM=3      # couldn't create a file/folder due to permissions
+E_PARSE_CONFIG=4	# error parsing config file
 
 ################
 # Trap signals #
@@ -326,7 +330,7 @@ print_version()
 #########################################
 # Part 3 : Process command-line options #
 #########################################
-while getopts "bmhvlH:u:p:P:d:n:" option
+while getopts "bmhvlH:u:p:P:d:n:c:" option
 do
 	case $option in
 		v)	# Version
@@ -336,6 +340,9 @@ do
 		h)	# Help
 			print_usage
 			exit $E_OK
+			;;
+		c)	# Config file
+			CONFIG_FILE=$OPTARG
 			;;
 		b)	# Backup
 			DO_BACKUP=1
@@ -366,6 +373,15 @@ do
 			;;
 	esac
 done
+
+# Parse config file if necessary
+if [ -e "$CONFIG_FILE" -a -r "$CONFIG_FILE" ]; then
+	source $CONFIG_FILE &> $TRASH
+	if [ "0" -ne "$?" ]; then
+		ECHO_FAIL "Failed to parse $CONFIG_FILE"
+		end_script E_PARSE_CONFIG
+	fi
+fi
 
 if [ -z ${BACKUP_HOST_NAME} ]; then
 	BACKUP_HOST_NAME=$DB_HOST

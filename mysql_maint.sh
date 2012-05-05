@@ -45,6 +45,7 @@ DB_HOST=127.0.0.1
 DB_USER=root
 DB_PASS=admin
 DB_PORT=3306
+DB_SOCKET=
 
 # Weekly backup day
 # (result of 'date %u')
@@ -317,6 +318,7 @@ print_usage()
 	echo "-u [login] : Login (default: root)"
 	echo "-p [password] : Password (default: admin)"
 	echo "-P [port] : MySQL port (default: 3306)"
+	echo "-S [socket] : MySQL socket (default: no socket defined)"
 	echo "-d [directory] : Backups folder (default: ${HOME}/backup/mysql)"
 	echo "-n [name] : Backups folder for this server (defaults to server name)"
 	echo "-l : Keep a copy of the latest backup for each database (default: yes)"
@@ -330,7 +332,7 @@ print_version()
 #########################################
 # Part 3 : Process command-line options #
 #########################################
-while getopts "bmhvlH:u:p:P:d:n:c:" option
+while getopts "bmhvlHS:u:p:P:d:n:c" option
 do
 	case $option in
 		v)	# Version
@@ -358,6 +360,9 @@ do
 			;;
 		p)	# Password
 			DB_PASS=$OPTARG
+			;;
+		S)	# Socket
+			DB_SOCKET=$OPTARG
 			;;
 		P)	# Port
 			DB_PORT=$OPTARG
@@ -407,6 +412,9 @@ export MYSQL_TCP_PORT=${DB_PORT}
 
 #IDENT_OPTS="-h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} -p${DB_PASS}"
 IDENT_OPTS="-h ${DB_HOST} -u ${DB_USER}"
+if [ -n "${DB_SOCKET}" ]; then
+	IDENT_OPTS="${IDENT_OPTS} --socket=${DB_SOCKET} "
+fi;
 
 MYSQL_OPTS="${MYSQL_OPTS} ${IDENT_OPTS}"
 MYSQLDUMP_OPTS="${MYSQLDUMP_OPTS} ${IDENT_OPTS}"

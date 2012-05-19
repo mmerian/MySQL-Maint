@@ -97,10 +97,10 @@ WEEKLY_FOLDER='03_weekly'
 MONTHLY_FOLDER='04_monthly'
 
 # Database that souldn't be maintained
-IGNORE_MAINTENANCE_DATABASES="mysql information_schema"
+IGNORE_MAINTENANCE_DATABASES="mysql information_schema performance_schema"
 
 # Databases that souldn't be backed up
-IGNORE_BACKUP_DATABASES="information_schema mysql"
+IGNORE_BACKUP_DATABASES="information_schema mysql performance_schema"
 
 # Databases that sould only be backed up / maintainted.
 # Overrides prevous setting

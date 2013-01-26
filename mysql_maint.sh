@@ -3,7 +3,7 @@
 ############################################################################################
 # MySQL Maint : A bash script that performs backups and maintenance on your MySQL servers. #
 #                                                                                          #
-# Copyright (C) 2009-2010  Maxime Mérian <maxime.merian@gmail.com>                         #
+# Copyright (C) 2009-2013  Maxime Mérian <maxime.merian@gmail.com>                         #
 #                                                                                          #
 # This program is free software: you can redistribute it and/or modify                     #
 # it under the terms of the GNU General Public License as published by                     #
@@ -182,7 +182,11 @@ DO_BACKUP=0
 # Check if running GNU/Linux #
 ##############################
 PLATFORM_IS_LINUX=yes
-systemName="`uname -a`"
+if [ -f '/proc/version' ]; then
+    systemName="`cat /proc/version`"
+else
+    systemName="`uname -a`"
+fi
 linuxCheck="`expr "$systemName" : ".*\(Linux\).*"`"
 if [ -z "$linuxCheck" ]; then
 	# uname -a didn't return a string that contains 'Linux'

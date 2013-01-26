@@ -332,7 +332,7 @@ print_version()
 #########################################
 # Part 3 : Process command-line options #
 #########################################
-while getopts "bmhvlHS:u:p:P:d:n:c" option
+while getopts "bmhvlH:S:u:p:P:d:n:c" option
 do
 	case $option in
 		v)	# Version

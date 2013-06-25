@@ -47,6 +47,12 @@ DB_PASS=admin
 DB_PORT=3306
 DB_SOCKET=
 
+# If we're running on a Debian family we can use the maintenance account.
+if [[ -f /etc/mysql/debian.cnf ]]; then
+    DB_USER=$(sudo grep user /etc/mysql/debian.cnf | head -n1 | sed -r 's/^.+=\s*//')
+    DB_PASS=$(sudo grep password /etc/mysql/debian.cnf | head -n1 | sed -r 's/^.+=\s*//')
+fi
+
 # Weekly backup day
 # (result of 'date %u')
 DOW='7'

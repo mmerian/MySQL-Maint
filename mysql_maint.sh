@@ -48,9 +48,11 @@ DB_PORT=3306
 DB_SOCKET=
 
 # If we're running on a Debian family we can use the maintenance account.
-if [[ -f /etc/mysql/debian.cnf ]]; then
-    DB_USER=$(sudo grep user /etc/mysql/debian.cnf | head -n1 | sed -r 's/^.+=\s*//')
-    DB_PASS=$(sudo grep password /etc/mysql/debian.cnf | head -n1 | sed -r 's/^.+=\s*//')
+if [[ -f /etc/mysql/debian.cnf && -r /etc/mysql/debian.cnf ]]; then
+    DB_HOST=$(grep host /etc/mysql/debian.cnf | head -n1 | sed -r 's/^.+=\s*//')
+    DB_USER=$(grep user /etc/mysql/debian.cnf | head -n1 | sed -r 's/^.+=\s*//')
+    DB_PASS=$(grep password /etc/mysql/debian.cnf | head -n1 | sed -r 's/^.+=\s*//')
+    DB_SOCKET=$(grep socket /etc/mysql/debian.cnf | head -n1 | sed -r 's/^.+=\s*//')
 fi
 
 # Weekly backup day
@@ -421,10 +423,16 @@ export MYSQL_PWD=${DB_PASS}
 export MYSQL_TCP_PORT=${DB_PORT}
 
 #IDENT_OPTS="-h ${DB_HOST} -P ${DB_PORT} -u ${DB_USER} -p${DB_PASS}"
-IDENT_OPTS="-h ${DB_HOST} -u ${DB_USER}"
+IDENT_OPTS=" -u ${DB_USER}"
 if [ -n "${DB_SOCKET}" ]; then
 	IDENT_OPTS="${IDENT_OPTS} --socket=${DB_SOCKET} "
+else
+    IDENT_OPTS="${IDENT_OPTS} -h '${DB_HOST}' "
 fi;
+
+if [ -n "${DB_PASS}" ]; then
+    IDENT_OPTS="${IDENT_OPTS} -p${DB_PASS} "
+fi
 
 MYSQL_OPTS="${MYSQL_OPTS} ${IDENT_OPTS}"
 MYSQLDUMP_OPTS="${MYSQLDUMP_OPTS} ${IDENT_OPTS}"

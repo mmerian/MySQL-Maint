@@ -206,7 +206,7 @@ fi
 #############################
 
 # Script version
-VERSION="1.1"
+VERSION="1.5"
 
 # File that is being written by the script. Will be deleted
 # on receiving SIGINT or SIGTERM, since it won't be valid

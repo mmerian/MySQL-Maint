@@ -223,7 +223,7 @@ if [ -n "$BASH" ]; then
 	OK_COLOR="\033[32m"
 	FAIL_COLOR="\033[31m"
 	T_RESET="\033[0m"
-	
+
 	ECHO_CMD()
 	{
 		echo -e $*
@@ -284,7 +284,7 @@ end_script()
 	if [ -e ${TEMP_FILE} ]; then
 		${RM} ${TEMP_FILE}
 	fi
-	
+
 	if [ -e ${PID_FILE} ]; then
 		${RM} $PID_FILE
 	fi
@@ -427,7 +427,7 @@ IDENT_OPTS=" -u ${DB_USER}"
 if [ -n "${DB_SOCKET}" ]; then
 	IDENT_OPTS="${IDENT_OPTS} --socket=${DB_SOCKET} "
 else
-    IDENT_OPTS="${IDENT_OPTS} -h '${DB_HOST}' "
+    IDENT_OPTS="${IDENT_OPTS} -h ${DB_HOST} "
 fi;
 
 if [ -n "${DB_PASS}" ]; then
@@ -595,7 +595,7 @@ is_mysql_5()
 # Lists all the databases #
 ###########################
 show_all_databases()
-{	
+{
 	echo `${MYSQL} -e "SHOW DATABASES"`
 }
 
@@ -745,7 +745,7 @@ db_backup()
 	${MYSQLDUMP} $db > ${TEMP_FILE} 2> ${TRASH}
 	if [ "0" -eq "$?" ]; then
 		cat ${TEMP_FILE}|${BZIP2} > $filename
-	
+
 		CURRENT_FILE=''
 
 		local latest=${dir}/${database}.latest.sql.bz2

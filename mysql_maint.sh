@@ -223,7 +223,7 @@ if [ -n "$BASH" ]; then
 	OK_COLOR="\033[32m"
 	FAIL_COLOR="\033[31m"
 	T_RESET="\033[0m"
-	
+
 	ECHO_CMD()
 	{
 		echo -e $*
@@ -284,7 +284,7 @@ end_script()
 	if [ -e ${TEMP_FILE} ]; then
 		${RM} ${TEMP_FILE}
 	fi
-	
+
 	if [ -e ${PID_FILE} ]; then
 		${RM} $PID_FILE
 	fi
@@ -595,7 +595,7 @@ is_mysql_5()
 # Lists all the databases #
 ###########################
 show_all_databases()
-{	
+{
 	echo `${MYSQL} -e "SHOW DATABASES"`
 }
 
@@ -610,7 +610,7 @@ show_maintenance_databases()
 		local databases=`show_all_databases`
 		local db=''
 		for db in ${IGNORE_MAINTENANCE_DATABASES}; do
-			databases=`echo ${databases}|${SED} "s/${db}//g"`
+			databases=`echo ${databases}|${SED} "s/\b${db}\b//g"`
 		done;
 		echo $databases
 	fi
@@ -627,7 +627,7 @@ show_backup_databases()
 		local databases=`show_all_databases`
 		local db=''
 		for db in ${IGNORE_BACKUP_DATABASES}; do
-			databases=`echo ${databases}|${SED} "s/${db}//g"`
+			databases=`echo ${databases}|${SED} "s/\b${db}\b//g"`
 		done;
 		echo $databases
 	fi
@@ -745,7 +745,7 @@ db_backup()
 	${MYSQLDUMP} $db > ${TEMP_FILE} 2> ${TRASH}
 	if [ "0" -eq "$?" ]; then
 		cat ${TEMP_FILE}|${BZIP2} > $filename
-	
+
 		CURRENT_FILE=''
 
 		local latest=${dir}/${database}.latest.sql.bz2

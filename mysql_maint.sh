@@ -427,7 +427,7 @@ IDENT_OPTS=" -u ${DB_USER}"
 if [ -n "${DB_SOCKET}" ]; then
 	IDENT_OPTS="${IDENT_OPTS} --socket=${DB_SOCKET} "
 else
-    IDENT_OPTS="${IDENT_OPTS} -h '${DB_HOST}' "
+    IDENT_OPTS="${IDENT_OPTS} -h ${DB_HOST} "
 fi;
 
 if [ -n "${DB_PASS}" ]; then
